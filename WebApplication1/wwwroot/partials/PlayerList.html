@@ -1,0 +1,26 @@
+﻿<div class="container">
+    <div class="text-center" style="background: rgba(245,245,245,.5); width: 600px; margin: auto; margin-top: 72px; border-radius: 12px; padding-left: 32px; padding-right: 32px; padding-top: 18px;padding-bottom: 18px;">
+        <h3>
+            List of Players
+        </h3>
+
+
+        <a href="#!/AddPlayer" class="btn btn-primary" style="margin-bottom:32px;">AdPlayer</a>
+
+        <table class="table table-bordered">
+            <tr>
+                <th class="arrow-up"><a ng-click="OrderEmployee('name')">Name<i class="arrow" ng-class="dirName">  </i></a></th>
+                <th><a ng-click="OrderEmployee('club')">Club<i class="arrow" ng-class="dirClub">  </i></a></th>
+                <th><a ng-click="OrderEmployee('country')">Country<i class="arrow" ng-class="dirCountry">  </i></a></th>
+                <th colspan="2">Manage</th>
+            </tr>
+            <tr ng-repeat="player in players">
+                <td>{{player.name}}</td>
+                <td>{{player.club}}</td>
+                <td>{{player.country}}</td>
+                <td><a href='#!/EditPlayer/{{player.playerId}}'>Edit</a></td>
+                <td><a href='#!/' ng-click="DeletePlayer(player.playerId,$index)">Delete</a></td>
+            </tr>
+        </table>
+    </div>
+</div>

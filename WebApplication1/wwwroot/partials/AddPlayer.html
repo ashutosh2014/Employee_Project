@@ -1,0 +1,26 @@
+﻿<div class="container">
+    <div style=" width: 420px; margin: auto; margin-top: 72px; background: #e8fff7; border-radius: 12px; padding-left: 32px; padding-right: 32px; padding-top: 18px; padding-bottom: 18px;">
+        <h3 class="text-center">Add Player</h3>
+
+        <form name="AddPlayerForm">
+            <div class="form-group" >
+                <label for="player.Name">Name</label>
+                <input type="text" class="form-control" ng-model="player.Name" required />
+            </div>
+            <div class="form-group">
+                <label for="player.Name">Club</label>
+                <input type="text" class="form-control" ng-model="player.Club" required />
+            </div>
+            <div class="form-group">
+                <label for="player.Name">Country</label>
+                <input type="text" class="form-control" ng-model="player.Country" required />
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" class="btn btn-success" value="submit" ng-disabled="AddPlayerForm.$invalid" ng-click="AddPlayer()" />
+            </div>
+        </form>
+        <div class="text-center">
+            <a class="btn btn-primary" href="#!/">Back to Main</a>
+        </div>
+    </div>
+</div>
