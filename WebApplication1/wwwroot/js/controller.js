@@ -8,17 +8,16 @@
         $scope.AddPlayer = function () {
             PlayerService.AddPlayerToDb($scope.player).then((response) => {
                 $location.path("/")
-                PlayerService.GetPlayerFromDb().then((response) => {
-                    $rootScope.players = response.data.list;
-                })
             })
-            
         }
     }).
     controller("MainController", function ($scope, PlayerService,$rootScope,$filter) {
-        PlayerService.GetPlayerFromDb().then((d) => $rootScope.players = d.data.list)
+        PlayerService.GetPlayerFromDb().then((d) => {
+            $rootScope.players = d.data.list;
+            $scope.showLoading = false;
+        })
         $scope.msg = "kdskd"
-
+        $scope.showLoading = true;
         var orderBy = $filter('orderBy');
         $scope.prevOrderArg = 'name';
         $scope.dirName = '';
@@ -73,11 +72,7 @@
             PlayerService.UpdatePlayer($scope.player).then((response) => {
                 alert(response.data.status)
                 $location.path("/")
-                PlayerService.GetPlayerFromDb().then((response) => {
-                    $rootScope.players = response.data.list;
-                })
             })
-            
         }
     })
     .factory("PlayerService", [ '$http', function ($http) {
@@ -85,8 +80,8 @@
 
 
         fac.AddPlayerToDb = function (player) {
-            return $http.post("/Player/AddPlayer", player).then((respone) => {
-                alert("Player Added Successfully");
+            return $http.post("/Player/AddPlayer", player).then((response) => {
+                alert(response.data.status);
             })
         }
         fac.UpdatePlayer = function (player) {
@@ -94,7 +89,6 @@
         }
         fac.DeletePlayer = function (id) {
             $http.post("/Player/DeletePlayer", id).then((response) => {
-                console.log(response);
                 alert(response.data.status);
             })
         }
