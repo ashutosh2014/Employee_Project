@@ -13,9 +13,14 @@
     }).
     controller("MainController", function ($scope, PlayerService,$rootScope,$filter) {
         PlayerService.GetPlayerFromDb().then((d) => {
-            $rootScope.players = d.data.list;
+            $rootScope.players = d.data;
             $scope.showLoading = false;
         })
+
+        PlayerService.getVAl().then((d) => {
+            console.log(d);
+        })
+
         $scope.msg = "kdskd"
         $scope.showLoading = true;
         var orderBy = $filter('orderBy');
@@ -50,8 +55,7 @@
             $rootScope.players = orderBy($rootScope.players, orderValue);
             $scope.prevOrderArg = orderValue;
         }
-        
-
+       
         $scope.DeletePlayer = function (id,index) {
             $rootScope.players.splice(index, 1);
             PlayerService.DeletePlayer(id);
@@ -64,13 +68,13 @@
         var id = $routeParams.id;
 
         PlayerService.GetPlayerById(id).then((d) => {
-            console.log(d.data.list);
-            $scope.player = d.data.list;
+            console.log(d.data);
+            $scope.player = d.data;
         })
           
         $scope.UpdatePlayer = function () {
-            PlayerService.UpdatePlayer($scope.player).then((response) => {
-                alert(response.data.status)
+            PlayerService.UpdatePlayer(id ,$scope.player).then((response) => {
+                alert(response.data)
                 $location.path("/")
             })
         }
@@ -80,23 +84,26 @@
 
 
         fac.AddPlayerToDb = function (player) {
-            return $http.post("/Player/AddPlayer", player).then((response) => {
-                alert(response.data.status);
+            return $http.post("/api/APIPlayer", player).then((response) => {
+                alert(response.data);
             })
         }
-        fac.UpdatePlayer = function (player) {
-            return $http.post("/Player/UpdatePlayer", player);
+        fac.UpdatePlayer = function (id, player) {
+            return $http.put("/api/APIPlayer/" +id , player);
         }
         fac.DeletePlayer = function (id) {
-            $http.post("/Player/DeletePlayer", id).then((response) => {
-                alert(response.data.status);
+            $http.delete("/api/APIPlayer/" + id).then((response) => {
+                alert(response.data);
             })
         }
         fac.GetPlayerFromDb = function () {
-            return $http.get("/Player/GetPlayer")
+            return $http.get("/api/APIPlayer")
         }
         fac.GetPlayerById = function (id) {
-            return $http.get("/Player/GetPlayerById", { params: { id: id } })
+            return $http.get("/api/APIPlayer/" +id)
+        }
+        fac.getVAl = () => {
+            return $http.get("/api/APIPlayer");
         }
         return fac;
     }])
