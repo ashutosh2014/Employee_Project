@@ -14,7 +14,7 @@ namespace AngularJSMVC.Controllers
     public class APIPlayerController : ControllerBase
     {
 
-        private TeamContext _teamContext = null;
+        private readonly TeamContext _teamContext = null;
 
         public APIPlayerController()
         {
@@ -30,7 +30,38 @@ namespace AngularJSMVC.Controllers
         public ActionResult<Player> Get(int id)
         {
             Player player = _teamContext.Players.Where(c => c.PlayerId == id).SingleOrDefault();
-            return  player;
+            return player;
+        }
+        [HttpPost("search")]
+        public ActionResult<IEnumerable<Player>> Post([FromBody]Search search)
+        {
+            List<Player> players = null;
+            if (search.searchValue == "")
+            {
+                players = _teamContext.Players.ToList();
+            }
+            else
+            {
+                switch (search.searchField)
+                {
+                    case "Name":
+                        players = _teamContext.Players.Where(c => c.Name.Contains(search.searchValue)).ToList();
+                        break;
+                    case "Club":
+                        players = _teamContext.Players.Where(c => c.Club.Contains(search.searchValue)).ToList();
+                        break;
+                    case "Country":
+                        players = _teamContext.Players.Where(c => c.Country.Contains(search.searchValue)).ToList();
+                        break;
+                    case "Search in all":
+                        players = _teamContext.Players.Where(c => (c.Name.Contains(search.searchValue) || c.Country.Contains(search.searchValue) || c.Club.Contains(search.searchValue) )).ToList();
+                        break;
+                    default: 
+                        break;
+                }
+            }
+            
+            return players;
         }
         [HttpPost]
         public string Post([FromBody] Player player)

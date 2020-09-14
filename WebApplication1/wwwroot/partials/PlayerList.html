@@ -1,27 +1,44 @@
 ﻿<div class="container">
-    
     <div class="text-center" style="background: rgba(245,245,245,.5); width: 600px; margin: auto; margin-top: 72px; border-radius: 12px; padding-left: 32px; padding-right: 32px; padding-top: 18px;padding-bottom: 18px;">
         <h3>
             List of Players
         </h3>
+        <select class="form-control noOfPages"
+                name="noOfPages"
+                ng-options="value for value in PlayerCtrl.noOfPages track by value"
+                ng-model="PlayerCtrl.noOfPage"></select>
+        <div class="search-div">
+            <input class=" form-control search" type="text" ng-change="PlayerCtrl.SearchChange()" placeholder="{{PlayerCtrl.searchField}}" ng-model="PlayerCtrl.searchValue" />
+            <select class="form-control search-select"
+                    ng-options="search.field for search in PlayerCtrl.searches track by search.value"
+                    ng-change="PlayerCtrl.SearchChange()"
+                    ng-model="PlayerCtrl.selectedSearhItem">
+            </select>
+        </div>
 
-
-        <a href="#!/AddPlayer" class="btn btn-primary" style="margin-bottom:32px;">AdPlayer</a>
-        <div class="loader" ng-show="showLoading">Loading...</div>
-        <table class="table table-bordered" ng-show="!showLoading">
+        <div class="loader" ng-show="PlayerCtrl.showLoading">Loading...</div>
+        <table class="table table-bordered" ng-show="!PlayerCtrl.showLoading">
             <tr>
-                <th class="arrow-up"><a ng-click="OrderEmployee('name')">Name<i class="arrow" ng-class="dirName">  </i></a></th>
-                <th><a ng-click="OrderEmployee('club')">Club<i class="arrow" ng-class="dirClub">  </i></a></th>
-                <th><a ng-click="OrderEmployee('country')">Country<i class="arrow" ng-class="dirCountry">  </i></a></th>
+                <th class="arrow-up"><a ng-click="PlayerCtrl.OrderEmployee('name')">Name<i class="arrow" ng-class="PlayerCtrl.dirName">  </i></a></th>
+                <th><a ng-click="PlayerCtrl.OrderEmployee('club')">Club<i class="arrow" ng-class="PlayerCtrl.dirClub">  </i></a></th>
+                <th><a ng-click="PlayerCtrl.OrderEmployee('country')">Country<i class="arrow" ng-class="PlayerCtrl.dirCountry">  </i></a></th>
                 <th colspan="2">Manage</th>
             </tr>
-            <tr ng-repeat="player in players">
+            <tr dir-paginate="player in (PlayerCtrl.players)|filterPlayer:PlayerCtrl.searchValue:PlayerCtrl.selectedSearhItem|itemsPerPage:PlayerCtrl.noOfPage">
+                <!--filterPlayer:PlayerCtrl.searchValue:PlayerCtrl.selectedSearhItem| -->
                 <td>{{player.name}}</td>
                 <td>{{player.club}}</td>
                 <td>{{player.country}}</td>
                 <td><a href='#!/EditPlayer/{{player.playerId}}'>Edit</a></td>
-                <td><a href='#!/' ng-click="DeletePlayer(player.playerId,$index)">Delete</a></td>
+                <td><a href='#!/' ng-click="PlayerCtrl.DeletePlayer(player.playerId,$index)">Delete</a></td>
             </tr>
         </table>
+        <dir-pagination-controls max-size="5"
+                                 direction-links="true"
+                                 boundary-links="true"
+                                 template-url="/js/directives/dirPagination.tpl.html">
+        </dir-pagination-controls>
+        <a href="#!/AddPlayer" class="btn btn-primary" style="margin-top12px;margin-bottom:32px;">AdPlayer</a>
     </div>
+ 
 </div>

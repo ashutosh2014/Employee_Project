@@ -17,11 +17,8 @@ namespace AngularJSMVC.Controllers
             _teamContext = new TeamContext();
         }
         public ActionResult Index()
-
         {
-
             return View();
-
         }
         [HttpPost]
         public JsonResult AddPlayer([FromBody] Player player)
